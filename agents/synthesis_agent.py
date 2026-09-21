@@ -1,5 +1,4 @@
-from langchain.chains import LLMChain
-from langchain.prompts import PromptTemplate
+from langchain_core.prompts import PromptTemplate
 
 def synthesis_agent(llm):
     prompt = PromptTemplate(
@@ -9,4 +8,4 @@ def synthesis_agent(llm):
         {context}
         """
     )
-    return LLMChain(llm=llm, prompt=prompt)
+    return prompt | llm

@@ -23,13 +23,13 @@ if query:
     vector_store = create_vector_store(docs, embeddings)
 
     planner = planner_agent(llm)
-    plan = planner.run(query)
+    plan = planner.invoke({"query": query})
 
     context = ""
     for sub_q in plan.split("\n"):
         context += research_agent(sub_q, vector_store)
 
     synthesizer = synthesis_agent(llm)
-    answer = synthesizer.run(context)
+    answer = synthesizer.invoke({"context": context})
 
     st.write(answer)

@@ -1,5 +1,4 @@
-from langchain.prompts import PromptTemplate
-from langchain.chains import LLMChain
+from langchain_core.prompts import PromptTemplate
 
 def planner_agent(llm):
     prompt = PromptTemplate(
@@ -9,4 +8,4 @@ def planner_agent(llm):
         Query: {query}
         """
     )
-    return LLMChain(llm=llm, prompt=prompt)
+    return prompt | llm
