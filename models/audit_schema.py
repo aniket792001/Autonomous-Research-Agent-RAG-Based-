@@ -39,6 +39,10 @@ class AuditFinding(BaseModel):
     risk_level: RiskLevel = Field(description="Risk if not compliant")
     gap_analysis: str = Field(description="Detailed explanation of compliance gaps or ambiguities")
     remediation_recommendation: str = Field(description="Actionable steps the organization must take to achieve compliance")
+    auditor_notes: Optional[str] = Field(default="", description="Human auditor review notes or commentary")
+    is_verified: Optional[bool] = Field(default=False, description="Whether verified by human compliance officer")
+    remediation_owner: Optional[str] = Field(default="", description="Assigned owner or team for remediation")
+    remediation_status: Optional[str] = Field(default="Open", description="Remediation status: Open | In Progress | Resolved")
 
 class AuditSummary(BaseModel):
     total_clauses_audited: int

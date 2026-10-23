@@ -4,11 +4,31 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AegisAudit AI - Autonomous Regulatory & Compliance Intelligence</title>
+  
+  <!-- Modern Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Design System CSS -->
   <link rel="stylesheet" href="/static/styles.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>">
+
+  <!-- Production-Grade React 18 & Babel Standalone Runtime -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js" crossorigin></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.6/babel.min.js" crossorigin></script>
 </head>
 <body>
-  <div id="app"></div>
-  <script src="/static/app.js"></script>
+  <div id="root">
+    <div style="height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #0B0F19; color: #94A3B8; font-family: sans-serif;">
+      <div style="font-size: 3rem; margin-bottom: 16px; animation: pulse 1.5s infinite;">🛡️</div>
+      <h2 style="color: #F8FAFC; margin-bottom: 8px;">Initializing AegisAudit AI Engine...</h2>
+      <p style="font-size: 0.9rem;">Loading Autonomous Multi-Agent Governance & Compliance Studio</p>
+    </div>
+  </div>
+
+  <!-- Pure React Application Engine -->
+  <script type="text/babel" data-presets="react" src="/static/app.jsx"></script>
 </body>
 </html>

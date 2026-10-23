@@ -145,18 +145,23 @@ Autonomous-Research-Agent-RAG-Based-/
 pip install -r requirements.txt
 ```
 
-### 2. Run the Dashboard (Streamlit UI)
-```powershell
-streamlit run app.py
-```
-> **Default Seeded Admin Account:**
-> - Email: `admin@aegisaudit.com`
-> - Password: `AdminPass123!`
-
-### 3. Run the FastAPI REST Server
+### 2. Launch the Production-Grade Pure React Application
 ```powershell
 python main.py
 ```
-* Interactive Swagger Docs: `http://127.0.0.1:8000/docs`
-* Authentication Endpoints: `POST /api/auth/register`, `POST /api/auth/login`
-* Async Jobs & SSE Stream: `POST /api/audit/jobs/submit`, `GET /api/audit/jobs/{id}/stream`
+Open your browser and navigate to:
+👉 **`http://127.0.0.1:8000/`**
+
+> **Default Seeded Admin Credentials:**
+> - Email: `admin@aegisaudit.com`
+> - Password: `AdminPass123!`
+> *(Click "💡 Auto-Fill" on the sign-in modal for 1-click access)*
+
+* **Executive Dashboard**: SVG Health Posture Donut, real-time KPI metrics, risk breakdown.
+* **Audit Studio**: 3-step wizard with pre-seeded standards, multi-document policy corpus selection, and live SSE multi-agent thought stream.
+* **Compliance Matrix & Deep Inspector**: Split-screen view with search, filter pills, policy citations, highlighted evidence, gap analysis, engineering fix recommendations, and auditor review governance controls.
+* **Standards Catalog**: ISO/IEC 27001:2022, SOC 2 Type II, GDPR Article 32, NIST CSF 2.0 with one-click audit launch.
+* **Compliance Diff & Regression**: Compare two audits to measure compliance score delta (+/-%), track resolved gaps, and prevent regressions.
+* **Export Center**: One-click downloads for Official Cryptographically Sealed PDF (ReportLab + SHA-256 seal), Jira Tasks CSV, Full Matrix CSV, and Markdown.
+* **Interactive Swagger REST Docs**: `http://127.0.0.1:8000/docs`
+

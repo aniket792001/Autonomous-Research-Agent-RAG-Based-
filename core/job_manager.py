@@ -8,7 +8,7 @@ import threading
 import queue
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, Optional, Generator
+from typing import Dict, Optional, Generator, List, Any
 from models.job_schema import AuditJobStatus, AuditJobResponse, AgentLogEvent
 from agents.orchestrator import AuditOrchestrator
 from db.storage import AuditDatabase
@@ -28,10 +28,17 @@ class JobManager:
 
     def _init_manager(self):
         self.jobs: Dict[str, AuditJobResponse] = {}
+        self.job_meta: Dict[str, Dict[str, Any]] = {}
         self.event_queues: Dict[str, queue.Queue] = {}
         self.db = AuditDatabase()
 
-    def create_job(self, standard_filename: str, policy_filename: str) -> str:
+    def create_job(
+        self,
+        standard_filename: str,
+        policy_filename: str,
+        standard_key: Optional[str] = None,
+        policy_filenames: Optional[List[str]] = None
+    ) -> str:
         job_id = f"JOB-{uuid.uuid4().hex[:8].upper()}"
         now_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
@@ -47,6 +54,10 @@ class JobManager:
         )
 
         self.jobs[job_id] = job
+        self.job_meta[job_id] = {
+            "standard_key": standard_key,
+            "policy_filenames": policy_filenames or ([policy_filename] if policy_filename else [])
+        }
         self.event_queues[job_id] = queue.Queue()
         logger.info(f"JobManager: Created async job {job_id}")
         return job_id
@@ -68,8 +79,22 @@ class JobManager:
         job.status = AuditJobStatus.PROCESSING
         job.updated_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-        standard_path = settings.DATA_DIR / job.standard_filename
-        policy_path = settings.DATA_DIR / job.policy_filename
+        meta = self.job_meta.get(job_id, {})
+        standard_key = meta.get("standard_key")
+        if standard_key:
+            from rag.standards_catalog import StandardsCatalogService
+            standard_path = StandardsCatalogService.get_standard_file_path(standard_key)
+        else:
+            standard_path = settings.DATA_DIR / job.standard_filename
+
+        policy_filenames = meta.get("policy_filenames")
+        if policy_filenames and len(policy_filenames) > 1:
+            policy_path = [settings.DATA_DIR / fn for fn in policy_filenames]
+        elif policy_filenames and len(policy_filenames) == 1:
+            policy_path = settings.DATA_DIR / policy_filenames[0]
+        else:
+            policy_path = settings.DATA_DIR / job.policy_filename
+
         ev_q = self.event_queues.get(job_id)
 
         def progress_tracker(message: str, pct: float):

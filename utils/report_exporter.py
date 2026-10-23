@@ -64,3 +64,38 @@ class ReportExporter:
     @staticmethod
     def to_json(report: FullAuditReport) -> str:
         return report.model_dump_json(indent=2)
+
+    @staticmethod
+    def to_pdf(report: FullAuditReport) -> bytes:
+        """Exports report to an executive-ready, cryptographically sealed PDF."""
+        from utils.pdf_generator import AuditPDFGenerator
+        return AuditPDFGenerator.generate_pdf(report)
+
+    @staticmethod
+    def to_remediation_csv(report: FullAuditReport) -> str:
+        """Exports non-compliant & partial findings into an actionable Jira-compatible task list."""
+        output = io.StringIO()
+        writer = csv.writer(output)
+        writer.writerow([
+            "Task ID", "Summary", "Severity", "Regulatory Clause",
+            "Identified Compliance Gap", "Actionable Fix Recommendation", "Assigned Owner", "Status"
+        ])
+        task_num = 1
+        for f in report.findings:
+            if f.status.value in ["Non-Compliant", "Partially Compliant"]:
+                priority = "Critical" if f.risk_level.value == "Critical" else "High" if f.risk_level.value == "High" else "Medium"
+                owner = getattr(f, "remediation_owner", "") or "SecOps / Compliance Lead"
+                task_status = getattr(f, "remediation_status", "") or "Open"
+                writer.writerow([
+                    f"GAP-{task_num:03d}",
+                    f"Remediate: {f.clause_id} - {f.clause_title}",
+                    priority,
+                    f"{f.clause_id} ({f.requirement_summary[:80]}...)",
+                    f.gap_analysis,
+                    f.remediation_recommendation,
+                    owner,
+                    task_status
+                ])
+                task_num += 1
+        return output.getvalue()
+

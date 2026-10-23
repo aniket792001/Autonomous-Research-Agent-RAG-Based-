@@ -1,0 +1,33 @@
+# ISO/IEC 27001:2022 - Annex A Information Security Controls
+
+## Domain 5: Organizational Controls
+### Control A.5.15: Access control
+Rules to control physical and logical access to information and other associated assets shall be established and implemented based on business and information security requirements. The organization must enforce least privilege, role-based access control (RBAC), and regular entitlement reviews every 90 days.
+
+### Control A.5.24: Information security incident management planning and preparation
+The organization shall plan and prepare for managing information security incidents by defining, establishing and communicating information security incident management processes, roles and responsibilities. The incident response plan must define severity triage levels, escalation chains, and mandatory response timeframes (maximum 1 hour for critical incidents).
+
+### Control A.5.29: Information security during disruption
+The organization shall establish processes to maintain information security at an appropriate level during disruption. Disaster recovery and business continuity plans must be tested at least annually with documented RTO (Recovery Time Objective) and RPO (Recovery Point Objective) targets.
+
+## Domain 8: Technological Controls
+### Control A.8.1: User endpoint devices
+Information stored on, processed by or accessible via user endpoint devices shall be protected. Mobile and remote workstation policies shall mandate full-disk encryption (AES-256 or BitLocker), centralized mobile device management (MDM), remote wipe capability, and automated idle lock after a maximum of 10 minutes.
+
+### Control A.8.5: Secure authentication
+Secure authentication technologies and procedures shall be implemented based on information access restrictions and the topic-specific policy on access control. Multi-Factor Authentication (MFA) must be strictly enforced for all remote access, privileged administrative accounts, and production cloud infrastructure.
+
+### Control A.8.7: Protection against malware
+Protection against malware shall be implemented and supported by appropriate user awareness. All endpoint and server systems must run continuously updating Endpoint Detection & Response (EDR) software with real-time file system monitoring and centralized alerting.
+
+### Control A.8.8: Management of technical vulnerabilities
+Information about technical vulnerabilities of information systems in use shall be obtained, the organization's exposure to such vulnerabilities evaluated and appropriate measures taken. Automated vulnerability scanning must occur at least weekly, with critical CVE patches deployed within 14 days of vendor release.
+
+### Control A.8.12: Data leakage prevention
+Data leakage prevention measures shall be applied to systems, networks and any other devices that process, store or transmit sensitive information. Outbound communications, email attachments, and external USB storage devices must be monitored and restricted using automated DLP mechanisms.
+
+### Control A.8.20: Network security
+Networks and network devices shall be secured, managed and controlled to protect information in systems and applications. Production networks must be logically isolated from development, testing, and corporate office networks using zero-trust firewall rules and encrypted VPN gateways.
+
+### Control A.8.24: Use of cryptography
+Rules for the effective use of cryptography, including cryptographic key management, shall be defined and implemented. All sensitive data-at-rest must be encrypted using AES-256 or higher, and all data-in-transit must enforce TLS 1.3 (with TLS 1.2 minimum). Cryptographic keys must be rotated at least annually.

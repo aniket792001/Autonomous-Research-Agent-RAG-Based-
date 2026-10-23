@@ -33,6 +33,12 @@ class AuditDatabase:
                     report_json TEXT
                 )
             """)
+            # Migration check for older SQLite databases
+            for col, col_type in [("compliant_count", "INTEGER DEFAULT 0"), ("non_compliant_count", "INTEGER DEFAULT 0")]:
+                try:
+                    cursor.execute(f"ALTER TABLE audit_runs ADD COLUMN {col} {col_type}")
+                except Exception:
+                    pass
             conn.commit()
 
     def save_report(self, report: FullAuditReport):
@@ -61,7 +67,8 @@ class AuditDatabase:
         with sqlite3.connect(str(self.db_path)) as conn:
             cursor = conn.cursor()
             cursor.execute("""
-                SELECT audit_id, standard_name, policy_name, timestamp, compliance_pct, total_clauses
+                SELECT audit_id, standard_name, policy_name, timestamp, compliance_pct, total_clauses,
+                       COALESCE(compliant_count, 0), COALESCE(non_compliant_count, 0)
                 FROM audit_runs ORDER BY timestamp DESC
             """)
             rows = cursor.fetchall()
@@ -72,7 +79,9 @@ class AuditDatabase:
                     "policy_name": r[2],
                     "timestamp": r[3],
                     "compliance_pct": r[4],
-                    "total_clauses": r[5]
+                    "total_clauses": r[5],
+                    "compliant_count": r[6],
+                    "non_compliant_count": r[7]
                 }
                 for r in rows
             ]
@@ -86,3 +95,15 @@ class AuditDatabase:
                 data = json.loads(row[0])
                 return FullAuditReport.model_validate(data)
         return None
+
+    def delete_audit(self, audit_id: str) -> bool:
+        """Deletes an audit report by ID from SQLite database."""
+        with sqlite3.connect(str(self.db_path)) as conn:
+            cursor = conn.cursor()
+            cursor.execute("DELETE FROM audit_runs WHERE audit_id = ?", (audit_id,))
+            conn.commit()
+            deleted = cursor.rowcount > 0
+            if deleted:
+                logger.info(f"AuditDatabase: Deleted audit run {audit_id}")
+            return deleted
+
